@@ -16,9 +16,9 @@ def parse_network_data(data):
         
         # Extract Receive and Transmit bytes values
         receive_bytes = int(values[1])
-        receive_drop = int(values[2])
+        receive_drop = int(values[4])
         transmit_bytes = int(values[9])
-        transmit_drop = int(values[10])
+        transmit_drop = int(values[12])
         
         interfaces_data[interface_name] = {
             "Receive": receive_bytes,
