@@ -8,7 +8,7 @@ mkdir -p data/net_tcp
 mkdir -p data/net_udp
 
 mkdir -p data/ps
-ps aux > data/ps/`date --iso-8601=seconds`.txt
+ps aux -T > data/ps/`date --iso-8601=seconds`.txt
 
 while true
 do
