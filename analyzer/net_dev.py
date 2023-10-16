@@ -29,7 +29,7 @@ def parse_network_data(data):
 
     return interfaces_data
 
-directory = "../data/net_dev"
+directory = "../data_shiojiri_4/net_dev"
 all_files_data = {}
 
 for filename in os.listdir(directory):
@@ -42,7 +42,7 @@ for filename in os.listdir(directory):
             except Exception as e:
                 print(f"Error processing {filename}: {e}")
 
-time_stamps = sorted([datetime.strptime(fname.split('.')[0], "%Y-%m-%dT%H:%M:%S%z") for fname in all_files_data.keys()])
+time_stamps = [datetime.strptime(fname.split('.')[0], "%Y-%m-%dT%H:%M:%S%z") for fname in sorted(all_files_data.keys())]
 
 def diff(lst):
     if lst == []:
@@ -59,21 +59,25 @@ def diff(lst):
 # Receive Plot
 plt.figure(figsize=(10, 5))
 for interface_name in all_files_data[list(all_files_data.keys())[0]].keys():
+    if interface_name == 'lo' or interface_name == 'eno1' or interface_name == 'enp5s0' or interface_name == 'enp2s0f0':
+        continue
+
     receive_values = [all_files_data[fname][interface_name]['Receive'] for fname in sorted(all_files_data.keys())]
-    plt.plot(time_stamps, diff(receive_values), label=interface_name)
-plt.legend()
+    diff_values = diff(receive_values)
+    plt.plot(time_stamps, diff_values, label=interface_name)
+plt.legend(loc='upper left')
 plt.xlabel('Time')
 plt.ylabel('Bytes Received')
 plt.title('Receive Bytes over Time')
 plt.grid(True)
 plt.tight_layout()
 
-# Receive Drop Plot
+# # Receive Drop Plot
 plt.figure(figsize=(10, 5))
 for interface_name in all_files_data[list(all_files_data.keys())[0]].keys():
     receive_values = [all_files_data[fname][interface_name]['Receive Drop'] for fname in sorted(all_files_data.keys())]
     plt.plot(time_stamps, diff(receive_values), label=interface_name)
-plt.legend()
+plt.legend(loc='upper left')
 plt.xlabel('Time')
 plt.ylabel('Packets')
 plt.title('Dropped Packets when Receive over Time')
@@ -83,9 +87,13 @@ plt.tight_layout()
 # Transmit Plot
 plt.figure(figsize=(10, 5))
 for interface_name in all_files_data[list(all_files_data.keys())[0]].keys():
+    if interface_name == 'lo' or interface_name == 'eno1' or interface_name == 'enp5s0' or interface_name == 'enp2s0f0':
+        continue
+
     transmit_values = [all_files_data[fname][interface_name]['Transmit'] for fname in sorted(all_files_data.keys())]
-    plt.plot(time_stamps, diff(transmit_values), label=interface_name)
-plt.legend()
+    diff_values = diff(transmit_values)
+    plt.plot(time_stamps, diff(diff_values), label=interface_name)
+plt.legend(loc='upper left')
 plt.xlabel('Time')
 plt.ylabel('Bytes Transmitted')
 plt.title('Transmit Bytes over Time')
@@ -97,7 +105,7 @@ plt.figure(figsize=(10, 5))
 for interface_name in all_files_data[list(all_files_data.keys())[0]].keys():
     receive_values = [all_files_data[fname][interface_name]['Transmit Drop'] for fname in sorted(all_files_data.keys())]
     plt.plot(time_stamps, diff(receive_values), label=interface_name)
-plt.legend()
+plt.legend(loc='upper left')
 plt.xlabel('Time')
 plt.ylabel('Packets')
 plt.title('Dropped Packets when Trasmit over Time')
