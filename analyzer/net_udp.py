@@ -25,7 +25,7 @@ def parse_network_data(data):
 
     return data
 
-directory = "../data_shiojiri_4/net_udp"
+directory = "../data/net_udp"
 all_files_data = {}
 
 def diff(lst):

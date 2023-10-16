@@ -29,7 +29,7 @@ def parse_network_data(data):
 
     return interfaces_data
 
-directory = "../data_shiojiri_4/net_dev"
+directory = "../data/net_dev"
 all_files_data = {}
 
 for filename in os.listdir(directory):
@@ -59,9 +59,6 @@ def diff(lst):
 # Receive Plot
 plt.figure(figsize=(10, 5))
 for interface_name in all_files_data[list(all_files_data.keys())[0]].keys():
-    if interface_name == 'lo' or interface_name == 'eno1' or interface_name == 'enp5s0' or interface_name == 'enp2s0f0':
-        continue
-
     receive_values = [all_files_data[fname][interface_name]['Receive'] for fname in sorted(all_files_data.keys())]
     diff_values = diff(receive_values)
     plt.plot(time_stamps, diff_values, label=interface_name)
@@ -87,12 +84,9 @@ plt.tight_layout()
 # Transmit Plot
 plt.figure(figsize=(10, 5))
 for interface_name in all_files_data[list(all_files_data.keys())[0]].keys():
-    if interface_name == 'lo' or interface_name == 'eno1' or interface_name == 'enp5s0' or interface_name == 'enp2s0f0':
-        continue
-
     transmit_values = [all_files_data[fname][interface_name]['Transmit'] for fname in sorted(all_files_data.keys())]
     diff_values = diff(transmit_values)
-    plt.plot(time_stamps, diff(diff_values), label=interface_name)
+    plt.plot(time_stamps, diff_values, label=interface_name)
 plt.legend(loc='upper left')
 plt.xlabel('Time')
 plt.ylabel('Bytes Transmitted')

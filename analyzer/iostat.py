@@ -44,7 +44,7 @@ def parse_data(data):
     return output
 
 
-directory = "../data_shiojiri_4/iostat"
+directory = "../data/iostat"
 all_files_data = {}
 
 for filename in os.listdir(directory):

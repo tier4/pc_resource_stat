@@ -25,7 +25,7 @@ def parse_data(data):
     return output
 
 
-directory = "../data_shiojiri_4/free"
+directory = "../data/free"
 all_files_data = {}
 
 for filename in os.listdir(directory):

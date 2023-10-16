@@ -9,6 +9,9 @@ inode_pid = [[] for x in range(0, size)]
 pid_command = [[] for x in range(0, size)]
 tid_command = [[] for x in range(0, size)]
 
+threshold = 100
+
+
 def parse_network_data(data):    
     lines = data.split('\n')
     for line in lines[1:]:
@@ -36,7 +39,6 @@ def parse_lsof_data(data):
         inode = int(values[5])
 
         inode_pid[inode].append(pid)
-        
 
 
 def parse_ps_data(data):
@@ -58,17 +60,18 @@ def parse_ps_data(data):
         tid_command[tid].append(line)
 
 
-for filename in os.listdir("../data_shiojiri_4"):
-    if filename.startswith("lsof_ip"):
-        with open(os.path.join("../data_shiojiri_4", filename), 'r') as f:
+dirname = "../data"
+for filename in os.listdir(dirname):
+    if filename.startswith("lsof"):
+        with open(os.path.join(dirname, filename), 'r') as f:
             parse_lsof_data(f.read())
 
     if filename.startswith("ps"):
-        with open(os.path.join("../data_shiojiri_4", filename), 'r') as f:
+        with open(os.path.join(dirname, filename), 'r') as f:
             parse_ps_data(f.read())
 
 
-directory = "../data_shiojiri_4/net_udp"
+directory = dirname + "/net_udp"
 for filename in os.listdir(directory):
     if filename.endswith(".txt"):
         with open(os.path.join(directory, filename), 'r') as f:
@@ -80,8 +83,8 @@ for filename in os.listdir(directory):
 
 
 inodes = []
-for inode, rx in enumerate(inode_rx):
-    if rx > 50000000:
+for inode, rx in enumerate(inode_tx):
+    if rx > threshold:
         inodes.append(inode)
 
 def parse_network_data(data, inode):    
@@ -113,7 +116,6 @@ def parse_network_data(data, inode):
     return data
 
 
-directory = "../data_shiojiri_4/net_udp"
 all_files_data = {}
 
 def diff(lst):
@@ -161,8 +163,8 @@ for inode in inodes:
     rx_values = [all_files_data[fname]['rx'] for fname in sorted(all_files_data.keys())]
     drop_values = [all_files_data[fname]['drop'] for fname in sorted(all_files_data.keys())]
     # plt.plot(time_stamps, tx_values, label='tx')
-    plt.plot(time_stamps, rx_values, label='rx')
-    # plt.plot(time_stamps, diff(drop_values), label='drop')
+    # plt.plot(time_stamps, rx_values, label='rx')
+    plt.plot(time_stamps, drop_values, label='drop')
     plt.legend()
     plt.xlabel('Time')
     plt.ylabel('rx queue')
