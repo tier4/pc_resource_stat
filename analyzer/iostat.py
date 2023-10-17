@@ -44,6 +44,19 @@ def parse_data(data):
     return output
 
 
+def diff(lst):
+    if lst == []:
+        return []
+
+    result = []
+    prev = lst[0]
+    for v in lst:
+        result.append(v - prev)
+        prev = v
+
+    return result
+
+
 directory = "../data/iostat"
 all_files_data = {}
 
@@ -60,8 +73,8 @@ time_stamps = sorted([datetime.strptime(fname.split('.')[0], "%Y-%m-%dT%H:%M:%S%
 plt.figure(figsize=(10, 5))  # Create a new figure for reads
 for device_name in all_files_data[list(all_files_data.keys())[0]]['devices'].keys():
     if not device_name.startswith('loop'):
-        reads_per_second = [all_files_data[fname]['devices'][device_name]['kB_read/s'] for fname in sorted(all_files_data.keys())]
-        plt.plot(time_stamps, reads_per_second, label=device_name)
+        reads_per_second = [all_files_data[fname]['devices'][device_name]['kB_read'] for fname in sorted(all_files_data.keys())]
+        plt.plot(time_stamps, diff(reads_per_second), label=device_name)
 plt.legend()
 plt.xlabel('Time')
 plt.ylabel('kB_read/s')
@@ -73,8 +86,8 @@ plt.tight_layout()
 plt.figure(figsize=(10, 5))  # Create a new figure for writes
 for device_name in all_files_data[list(all_files_data.keys())[0]]['devices'].keys():
     if not device_name.startswith('loop'):
-        writes_per_second = [all_files_data[fname]['devices'][device_name]['kB_wrtn/s'] for fname in sorted(all_files_data.keys())]
-        plt.plot(time_stamps, writes_per_second, label=device_name)
+        writes_per_second = [all_files_data[fname]['devices'][device_name]['kB_wrtn'] for fname in sorted(all_files_data.keys())]
+        plt.plot(time_stamps, diff(writes_per_second), label=device_name)
 plt.legend()
 plt.xlabel('Time')
 plt.ylabel('kB_wrtn/s')

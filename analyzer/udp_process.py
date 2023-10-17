@@ -9,7 +9,7 @@ inode_pid = [[] for x in range(0, size)]
 pid_command = [[] for x in range(0, size)]
 tid_command = [[] for x in range(0, size)]
 
-threshold = 100
+threshold = 10000
 
 
 def parse_network_data(data):    
@@ -83,8 +83,8 @@ for filename in os.listdir(directory):
 
 
 inodes = []
-for inode, rx in enumerate(inode_tx):
-    if rx > threshold:
+for inode, tx in enumerate(inode_tx):
+    if tx > threshold:
         inodes.append(inode)
 
 def parse_network_data(data, inode):    
@@ -162,12 +162,12 @@ for inode in inodes:
     tx_values = [all_files_data[fname]['tx'] for fname in sorted(all_files_data.keys())]
     rx_values = [all_files_data[fname]['rx'] for fname in sorted(all_files_data.keys())]
     drop_values = [all_files_data[fname]['drop'] for fname in sorted(all_files_data.keys())]
-    # plt.plot(time_stamps, tx_values, label='tx')
+    plt.plot(time_stamps, tx_values, label='tx')
     # plt.plot(time_stamps, rx_values, label='rx')
-    plt.plot(time_stamps, drop_values, label='drop')
+    # plt.plot(time_stamps, drop_values, label='drop')
     plt.legend()
     plt.xlabel('Time')
-    plt.ylabel('rx queue')
+    plt.ylabel('tx queue')
     plt.title('{},{}'.format(node, ns))
     plt.grid(True)
     plt.tight_layout()

@@ -16,14 +16,18 @@ def parse_network_data(data):
         
         # Extract Receive and Transmit bytes values
         receive_bytes = int(values[1])
+        receive_packets = int(values[2])
         receive_drop = int(values[4])
         transmit_bytes = int(values[9])
+        transmit_packets = int(values[10])
         transmit_drop = int(values[12])
         
         interfaces_data[interface_name] = {
             "Receive": receive_bytes,
+            "Receive Packets": receive_packets,
             "Receive Drop": receive_drop,
             "Transmit": transmit_bytes,
+            "Transmit Packets": transmit_packets,
             "Transmit Drop": transmit_drop,
         }
 
@@ -69,6 +73,19 @@ plt.title('Receive Bytes over Time')
 plt.grid(True)
 plt.tight_layout()
 
+# Receive Packet Plot
+plt.figure(figsize=(10, 5))
+for interface_name in all_files_data[list(all_files_data.keys())[0]].keys():
+    receive_values = [all_files_data[fname][interface_name]['Receive Packets'] for fname in sorted(all_files_data.keys())]
+    diff_values = diff(receive_values)
+    plt.plot(time_stamps, diff_values, label=interface_name)
+plt.legend(loc='upper left')
+plt.xlabel('Time')
+plt.ylabel('Packets Received')
+plt.title('Receive Packets over Time')
+plt.grid(True)
+plt.tight_layout()
+
 # # Receive Drop Plot
 plt.figure(figsize=(10, 5))
 for interface_name in all_files_data[list(all_files_data.keys())[0]].keys():
@@ -91,6 +108,19 @@ plt.legend(loc='upper left')
 plt.xlabel('Time')
 plt.ylabel('Bytes Transmitted')
 plt.title('Transmit Bytes over Time')
+plt.grid(True)
+plt.tight_layout()
+
+# Transmit Packet Plot
+plt.figure(figsize=(10, 5))
+for interface_name in all_files_data[list(all_files_data.keys())[0]].keys():
+    transmit_values = [all_files_data[fname][interface_name]['Transmit Packets'] for fname in sorted(all_files_data.keys())]
+    diff_values = diff(transmit_values)
+    plt.plot(time_stamps, diff_values, label=interface_name)
+plt.legend(loc='upper left')
+plt.xlabel('Time')
+plt.ylabel('Packets Transmitted')
+plt.title('Transmit Packets over Time')
 plt.grid(True)
 plt.tight_layout()
 
