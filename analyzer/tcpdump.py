@@ -25,11 +25,6 @@ with open(os.path.join(directory, 'lsof.txt'), 'r') as f:
 
         cmd = values[0]
         pid = int(values[1])
-        
-        try:
-            tid = int(values[2])
-        except ValueError:
-            continue
 
         name = values[-1].split(':')
 
@@ -39,7 +34,6 @@ with open(os.path.join(directory, 'lsof.txt'), 'r') as f:
             
                 port_to_cmd[port] = cmd
                 port_to_pid[port] = pid
-                port_to_tid[port] = tid
         
 
 pid_to_cmd = {}
@@ -51,7 +45,6 @@ with open(os.path.join(directory, 'ps.txt'), 'r') as f:
 
         values = line.split()
         pid = int(values[1])
-        tid = int(values[2])
         cmd = values[11:]
 
         pid_to_cmd[pid] = cmd
@@ -126,20 +119,10 @@ for port, packet_sum in len_sum_per_port.items():
             else:
                 logs_per_second[timestamp] = length
 
-    pid = port_to_pid[port]
-    cmd = pid_to_cmd[pid]
-    name = ''
-    for c in cmd:
-        if c.startswith('__node:='):
-            name = name + c[8:]
-
-        if c.startswith('__ns:='):
-            name = c[6:] + ' ' + name
-
-    plt.plot(logs_per_second.keys(), logs_per_second.values(), label=name)
+    plt.plot(logs_per_second.keys(), logs_per_second.values(), label=f"port={port}")
     
     index += 1
-    if index == 20:
+    if index == 10:
         break
 
 plt.legend(loc="upper left")
