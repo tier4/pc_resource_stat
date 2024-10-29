@@ -1,6 +1,8 @@
 #!/usr/bin/sh
 
-mkdir -p data2
-ps aux -T > data2/ps.txt
-lsof > data2/lsof.txt
-sudo tcpdump -n -i lo > data2/tcpdump.txt
+DIR_NAME=$1
+
+mkdir -p $DIR_NAME
+ps aux -T >$DIR_NAME/ps.txt
+lsof >$DIR_NAME/lsof.txt
+sudo tcpdump -n -i lo >$DIR_NAME/tcpdump.txt
